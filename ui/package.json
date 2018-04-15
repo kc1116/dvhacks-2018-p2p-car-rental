@@ -1,0 +1,23 @@
+{
+  "name": "ui",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "libp2p": "^0.20.2",
+    "libp2p-mplex": "^0.7.0",
+    "libp2p-railing": "^0.8.1",
+    "libp2p-secio": "^0.10.0",
+    "libp2p-spdy": "^0.12.1",
+    "libp2p-webrtc-star": "^0.14.0",
+    "libp2p-websockets": "^0.11.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
