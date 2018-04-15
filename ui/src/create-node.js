@@ -1,4 +1,4 @@
-import {Node} from './libp2p-vendor'
+import NewNode from './libp2p-vendor'
 
 const PeerInfo = require('peer-info')
 
@@ -13,7 +13,7 @@ export const createNode = (callback) => {
 
     peerInfo.multiaddrs.add(ma)
 
-    const node = new Node(peerInfo)
+    const node = NewNode(peerInfo)
 
     node.idStr = peerIdStr
     callback(null, node)

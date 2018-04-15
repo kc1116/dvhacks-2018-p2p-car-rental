@@ -1,0 +1,7 @@
+{
+    "cars": [
+        {"title": "Honda Civic", "description": "Very good on gas","price": "20$hr", "image": "http://127.0.0.1:8080/ipfs/QmbYVky8iyHRpsYPChfPiC2BpJAeFcLcGgzFdg2D1ViHEZ"},
+        {"title": "BMW", "description": "Very good looking","price": "30$hr", "image": "http://127.0.0.1:8080/ipfs/QmcmfSauGQSxxbu1S8Vmcv5xvw15YduDNSTjKor3SpWVEh"},
+        {"title": "Tesla", "description": "Very Elon Musk","price": "40$hr", "image": "http://127.0.0.1:8080/ipfs/QmU7AHBewjmFWCQsFE63ZCiUKn3oacUtBzBMj8N5YRBVP6"}
+    ]
+}
