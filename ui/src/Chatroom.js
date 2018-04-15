@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createNode} from './create-node';
 import { Widget, addResponseMessage, addLinkSnippet, addUserMessage } from 'react-chat-widget';
+import axios from 'axios';
 
-import { Input, Button } from 'semantic-ui-react'
+import { Input, Button, Card, Icon, Image } from 'semantic-ui-react'
 
 import 'react-chat-widget/lib/styles.css';
 
@@ -65,13 +66,10 @@ class Chatroom extends React.Component {
         })
     }
     componentWillMount() {
-        const req = new XMLHttpRequest();
-        req.addEventListener("load", (data => {
-            const d = JSON.parse(data.responseText);
-            this.setState({cars: d.cars})
-        }));
-        req.open("GET", cars);
-        req.send();
+        axios.get(cars)
+        .then(res => {
+            this.setState({cars: res.data.cars})
+        });
         createNode((err, node) => {
             if (err) {
               console.log('Could not create the Node, check if your browser has WebRTC Support', err)
@@ -147,10 +145,10 @@ class Chatroom extends React.Component {
                         <input />
                         <Button type='submit' onClick={this.connect}>Connect</Button>
                     </Input>
-                    <div>
+                    <div style={{display: 'flex', alignItems: 'flex-end', flexDirection: 'row', justifyContent: 'space-between'}}>
                         {this.state.cars.map((car, i) => {
                             return (
-                                <Card>
+                                <Card style={{padding: 10}} key={i}>
                                     <Image src={car.image} />
                                     <Card.Content>
                                     <Card.Header>
@@ -162,7 +160,7 @@ class Chatroom extends React.Component {
                                     </Card.Content>
                                     <Card.Content extra>
                                     <a>
-                                        <Icon name='Price' />
+                                        <Icon name='dollar' />
                                         {car.price}
                                     </a>
                                     </Card.Content>
