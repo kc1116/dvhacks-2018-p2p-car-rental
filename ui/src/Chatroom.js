@@ -31,16 +31,19 @@ class Chatroom extends React.Component {
     }
     handleNewUserMessage = (newMessage) => {
         console.log(`New message incomig! ${newMessage}`);
+        p.push(newMessage)
+        
         // Now send the message throught the backend API
     }
     connect(){
+        console.log(this.state.peerChatId)
         const idstr = this.state.peerChatId;
         const id = PeerId.createFromB58String(idstr);
         const peerInfo = new PeerInfo(id);
         const ma = `/dns4/star-signal.cloud.ipfs.team/tcp/443/wss/p2p-webrtc-star/ipfs/${idstr}`
         peerInfo.multiaddrs.add(ma)
 
-        this.state.p2pNode.dial(peerInfo, '/chat/1.0.0', (err, conn) => {
+        this.state.p2pNode.dialProtocol(peerInfo, '/chat/1.0.0', (err, conn) => {
             if (err) { return console.log('Failed to dial:', idstr) }
               console.log('nodeA dialed to nodeB on protocol: /chat/1.0.0')
               console.log('Type a message and see what happens')
@@ -53,16 +56,12 @@ class Chatroom extends React.Component {
               pull(
                 conn,
                 pull.map((data) => {
-                  return data.toString('utf8').replace('\n', '')
+                  return data.toString('utf8')
                 }),
-                pull.drain(console.log)
+                pull.drain((data) => {
+                    addResponseMessage(data);
+                })
               )
-        
-              process.stdin.setEncoding('utf8')
-              process.openStdin().on('data', (chunk) => {
-                var data = chunk.toString()
-                p.push(data)
-              })
         })
     }
     componentWillMount() {
@@ -94,16 +93,15 @@ class Chatroom extends React.Component {
                 pull(
                   conn,
                   pull.map((data) => {
-                    return data.toString('utf8').replace('\n', '')
+                    console.log(data)
+                    return data.toString('utf8')
                   }),
-                  pull.drain(console.log)
+                  pull.drain((data) => {
+                      addResponseMessage(data);
+                  })
                 )
-          
-                process.stdin.setEncoding('utf8')
-                process.openStdin().on('data', (chunk) => {
-                  var data = chunk.toString()
-                  p.push(data)
-                })
+
+                this.setState({peerChatId: 'chatting'})
               })
             node.start((err) => {
               if (err) {
@@ -141,7 +139,7 @@ class Chatroom extends React.Component {
 
                 <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                     <h1>Your Peer ID {this.state.p2pNode ? this.state.p2pNode.idStr: "Connecting . . ."}</h1>
-                    <Input type='text' onChange={(text => this.setState({peerChatId: text}))} placeholder='Enter PeerId to chat...' action>
+                    <Input type='text' onChange={((e) => this.setState({peerChatId: e.currentTarget.value}))} placeholder='Enter PeerId to chat...' action>
                         <input />
                         <Button type='submit' onClick={this.connect}>Connect</Button>
                     </Input>
